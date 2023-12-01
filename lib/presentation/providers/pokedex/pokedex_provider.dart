@@ -13,6 +13,7 @@ typedef PokedexCallback = Future<List<Pokemon>> Function(
     {int cantidadPokemons});
 
 class PokedexNotifier extends StateNotifier<List<Pokemon>> {
+  List<Pokemon> _pokemonsBeforeSearch = [];
   int cantidadPokemons = 0;
   bool isLoading = false;
   final PokedexCallback callback;
@@ -25,6 +26,27 @@ class PokedexNotifier extends StateNotifier<List<Pokemon>> {
     state = pokemonsAlfabeticos;
   }
 
+  void sortPokemonsId() {
+    final List<Pokemon> pokemonsId = List<Pokemon>.from(state)
+      ..sort((a, b) => a.idPokemon.compareTo(b.idPokemon));
+    state = pokemonsId;
+  }
+
+  void buscarPokemons({required String nombrePokemon}) {
+    final List<Pokemon> pokemonsBuscados =
+        buscarPokemonPorNombre(_pokemonsBeforeSearch, nombrePokemon);
+    state = pokemonsBuscados;
+  }
+
+  List<Pokemon> buscarPokemonPorNombre(
+      List<Pokemon> listaOriginal, String nombreBusqueda) {
+    return listaOriginal.where((pokemon) {
+      return pokemon.nombre
+          .toLowerCase()
+          .contains(nombreBusqueda.toLowerCase());
+    }).toList();
+  }
+
   Future<void> loadNextPage() async {
     if (isLoading) return;
     isLoading = true;
@@ -32,6 +54,7 @@ class PokedexNotifier extends StateNotifier<List<Pokemon>> {
     final List<Pokemon> pokemonList =
         await callback(cantidadPokemons: cantidadPokemons);
     state = [...state, ...pokemonList];
+    _pokemonsBeforeSearch = state;
     isLoading = false;
   }
 }

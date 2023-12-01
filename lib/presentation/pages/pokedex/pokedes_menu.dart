@@ -114,13 +114,21 @@ class _Buscador extends ConsumerWidget {
               child: Material(
                 color: colorSecundario,
                 borderRadius: BorderRadius.circular(60),
-                child: const TextField(
-                  decoration: InputDecoration(
+                child: TextField(
+                  onChanged: (value) {
+                    ref
+                        .read(pokemonsListProvider.notifier)
+                        .buscarPokemons(nombrePokemon: value);
+                  },
+                  decoration: const InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Search',
                     contentPadding: EdgeInsets.fromLTRB(
-                        0, 10.5, 0, 0), // Ajusta el padding como necesites
-
+                      0,
+                      10.5,
+                      0,
+                      0,
+                    ),
                     prefixIcon: Icon(
                       Icons.search,
                       color: colorPrincipal,
@@ -131,18 +139,34 @@ class _Buscador extends ConsumerWidget {
             ),
           ),
           SizedBox(width: padding),
-          SizedBox(
-            width: 43,
-            height: 43,
-            child: Material(
-              color: colorSecundario,
-              borderRadius: BorderRadius.circular(60),
-              child: InkWell(
-                onTap: () {
-                  ref
-                      .read(pokemonsListProvider.notifier)
-                      .sortPokemonsAlfabeticamente();
-                },
+          PopupMenuButton<String>(
+            itemBuilder: (context) {
+              return [
+                const PopupMenuItem(
+                  value: 'id',
+                  child: Text('Ordenar por ID'),
+                ),
+                const PopupMenuItem(
+                  value: 'alfabetico',
+                  child: Text('Ordenar alfabeticamente'),
+                ),
+              ];
+            },
+            onSelected: (String value) {
+              if (value == 'alfabetico') {
+                ref
+                    .read(pokemonsListProvider.notifier)
+                    .sortPokemonsAlfabeticamente();
+              } else if (value == 'id') {
+                ref.read(pokemonsListProvider.notifier).sortPokemonsId();
+              }
+            },
+            child: SizedBox(
+              width: 43,
+              height: 43,
+              child: Material(
+                color: colorSecundario,
+                borderRadius: BorderRadius.circular(60),
                 child: const Icon(Icons.menu, color: colorPrincipal),
               ),
             ),
@@ -172,7 +196,6 @@ class _ListPokemonsState extends ConsumerState<_ListPokemons> {
 
       if (scrollController.position.pixels + 500 >=
           scrollController.position.maxScrollExtent) {
-        print('Se llego al final de la lista');
         ref.read(pokemonsListProvider.notifier).loadNextPage();
       }
     });
