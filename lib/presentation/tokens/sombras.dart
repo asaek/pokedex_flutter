@@ -1,4 +1,4 @@
-import 'package:examen_poke_api/presentation/widgets/common/tokens/colores.dart';
+import 'package:examen_poke_api/presentation/tokens/colores.dart';
 import 'package:flutter/widgets.dart';
 
 const List<BoxShadow> sombraPrincipal = [

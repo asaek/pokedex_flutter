@@ -1,8 +1,9 @@
 import 'package:examen_poke_api/domain/entities/entitites.dart';
 import 'package:examen_poke_api/presentation/providers/providers.dart';
-import 'package:examen_poke_api/presentation/widgets/common/tokens/border_radius.dart';
-import 'package:examen_poke_api/presentation/widgets/common/tokens/colores.dart';
-import 'package:examen_poke_api/presentation/widgets/common/tokens/sombras.dart';
+import 'package:examen_poke_api/presentation/tokens/border_radius.dart';
+import 'package:examen_poke_api/presentation/tokens/colores.dart';
+import 'package:examen_poke_api/presentation/tokens/paddings.dart';
+import 'package:examen_poke_api/presentation/tokens/sombras.dart';
 import 'package:examen_poke_api/presentation/widgets/common/widgets_common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,7 +28,14 @@ class PokedexPage extends StatelessWidget {
                 padding: EdgeInsets.only(left: padding),
                 child: Row(
                   children: [
-                    Pokebola(),
+                    Pokebola(
+                      colorBoton: colorSecundario,
+                      colorFondoBoton: colorPrincipal,
+                      alturaCaras: 17,
+                      anchuraCaras: 39,
+                      margenEntreCaras: 5,
+                      radioExterior: 9,
+                    ),
                     SizedBox(width: 20),
                     Text(
                       'Pokédex',
@@ -45,14 +53,12 @@ class PokedexPage extends StatelessWidget {
               height: 15,
             ),
             const _Buscador(padding: padding),
+            const SizedBox(
+              height: 20,
+            ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 7,
-                  right: 7,
-                  top: 20,
-                  bottom: 7,
-                ),
+                padding: paddingCuadroGridandDetails,
                 child: ClipRRect(
                   borderRadius: borderRadiusGridView,
                   child: Material(
@@ -266,7 +272,7 @@ class _ListPokemonsState extends ConsumerState<_ListPokemons> {
                           child: Text(
                             pokemons[index].idPokemon.toString(),
                             style: const TextStyle(
-                              color: colorTarjetaId,
+                              color: colorMedium,
                               fontSize: 12,
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w400,

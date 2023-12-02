@@ -1,4 +1,4 @@
-import 'package:examen_poke_api/presentation/widgets/common/tokens/colores.dart';
+import 'package:examen_poke_api/presentation/tokens/colores.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
@@ -14,6 +14,6 @@ class AppTheme {
             .copyWith(secondary: const Color(0xffDC0A2D)),
 
         textSelectionTheme:
-            const TextSelectionThemeData(cursorColor: Colors.red),
+            const TextSelectionThemeData(cursorColor: Color(0xffDC0A2D)),
       );
 }

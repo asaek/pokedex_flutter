@@ -1,14 +1,25 @@
-import 'package:examen_poke_api/presentation/widgets/common/tokens/colores.dart';
 import 'package:flutter/material.dart';
 
 class Pokebola extends StatelessWidget {
-  const Pokebola({super.key});
+  final Color colorBoton;
+  final Color colorFondoBoton;
+  final double anchuraCaras;
+  final double alturaCaras;
+  final double margenEntreCaras;
+  final double radioExterior;
+
+  const Pokebola({
+    super.key,
+    required this.colorBoton,
+    required this.colorFondoBoton,
+    required this.anchuraCaras,
+    required this.alturaCaras,
+    required this.margenEntreCaras,
+    required this.radioExterior,
+  });
 
   @override
   Widget build(BuildContext context) {
-    const double alturaCaras = 16;
-    const double anchuraCaras = 36;
-    const double margenEntreCaras = 5;
     return Container(
       width: anchuraCaras,
       height: (alturaCaras * 2) + margenEntreCaras,
@@ -25,11 +36,11 @@ class Pokebola extends StatelessWidget {
               width: anchuraCaras,
               height: alturaCaras,
               // margin: const EdgeInsets.only(bottom: 20.0),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50.0),
-                  topRight: Radius.circular(50.0),
+              decoration: BoxDecoration(
+                color: colorBoton,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(500),
+                  topRight: Radius.circular(500),
                 ),
               ),
             ),
@@ -40,23 +51,23 @@ class Pokebola extends StatelessWidget {
             child: Container(
               width: anchuraCaras,
               height: alturaCaras,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(50),
-                  bottomRight: Radius.circular(50),
+              decoration: BoxDecoration(
+                color: colorBoton,
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(500),
+                  bottomRight: Radius.circular(500),
                 ),
               ),
             ),
           ),
 
           //* Boton de la Pokebola
-          const CircleAvatar(
-            backgroundColor: colorPrincipal,
-            radius: 9,
+          CircleAvatar(
+            backgroundColor: colorFondoBoton,
+            radius: radioExterior,
             child: CircleAvatar(
-              backgroundColor: Colors.white,
-              radius: 5,
+              backgroundColor: colorBoton,
+              radius: radioExterior / 2,
             ),
           ),
         ],
