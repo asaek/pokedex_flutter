@@ -16,7 +16,6 @@ class PokedexPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final Size size = MediaQuery.of(context).size;
     const double padding = 20;
     return Scaffold(
       body: Center(
@@ -236,9 +235,13 @@ class _ListPokemonsState extends ConsumerState<_ListPokemons> {
         // final Size size = MediaQuery.of(context).size;
         return Material(
           child: InkWell(
-            onTap: () => context.push(
-              '/pokemon_details',
-            ),
+            onTap: () {
+              ref.read(selectedPokemonProvider.notifier).state =
+                  pokemons[index];
+              context.push(
+                '/pokemon_details',
+              );
+            },
             child: Container(
               decoration: BoxDecoration(
                 color: colorSecundario,

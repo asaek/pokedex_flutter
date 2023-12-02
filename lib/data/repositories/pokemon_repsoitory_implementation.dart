@@ -8,7 +8,7 @@ class PokemonRepositoryImplementation extends PokemonsRepository {
   PokemonRepositoryImplementation({required this.pokeApiDataSource});
 
   @override
-  Future<List<Pokemon>> getPokemons({int cantidadPokemons = 20}) {
+  Future<List<Pokemon>> getPokemons({int cantidadPokemons = 25}) {
     return pokeApiDataSource.getPokedex(inicioListPokemons: cantidadPokemons);
   }
 }

@@ -6,7 +6,7 @@ import 'package:examen_poke_api/domain/entities/pokemon_entity/pokemon_entity.da
 
 class PokedexApiDatasource extends PokeApiDataSource {
   @override
-  Future<List<Pokemon>> getPokedex({int inicioListPokemons = 40}) async {
+  Future<List<Pokemon>> getPokedex({int inicioListPokemons = 25}) async {
     final Dio dio = Dio();
     List<Pokemon> pokemons = [];
     // Map<String, dynamic> queryParameters = {
@@ -18,8 +18,8 @@ class PokedexApiDatasource extends PokeApiDataSource {
     try {
       final List<PokemonDbResponse> listPokemons = [];
       int offset = 1;
-      if (inicioListPokemons > 40) {
-        offset = inicioListPokemons - 39;
+      if (inicioListPokemons > 25) {
+        offset = inicioListPokemons - 24;
       }
       for (int i = offset; i <= inicioListPokemons; i++) {
         final responsePokeApi =
@@ -32,15 +32,15 @@ class PokedexApiDatasource extends PokeApiDataSource {
               PokemonDbResponse.fromJson(responsePokeApi.data);
           // print(pokemonDbResponse);
           //* Solicitur de la descripcion
-          // final responseDescripcion =
-          //     await dio.get(pokemonDbResponse.species.urlDescripcion);
+          final responseDescripcion =
+              await dio.get(pokemonDbResponse.species.urlDescripcion);
           listPokemons.add(pokemonDbResponse);
-          // final DescripcionDbResponse descripcionDbResponse =
-          //     DescripcionDbResponse.fromJson(responseDescripcion.data);
+          final DescripcionDbResponse descripcionDbResponse =
+              DescripcionDbResponse.fromJson(responseDescripcion.data);
 
-          // pokemonDbResponse.species.urlDescripcion = descripcionDbResponse
-          //     .flavorTextEntries[0].flavorText
-          //     .replaceAll('\n', '');
+          pokemonDbResponse.species.urlDescripcion = descripcionDbResponse
+              .flavorTextEntries[0].flavorText
+              .replaceAll('\n', '');
         } else {
           // print('Error al hacer la peticion');
           // print('${response.statusCode}   Error: ${response.statusMessage}');

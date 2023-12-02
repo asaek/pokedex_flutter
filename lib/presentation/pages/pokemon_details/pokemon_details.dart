@@ -1,51 +1,59 @@
+import 'package:examen_poke_api/domain/entities/entitites.dart';
+import 'package:examen_poke_api/presentation/providers/providers.dart';
 import 'package:examen_poke_api/presentation/tokens/border_radius.dart';
 import 'package:examen_poke_api/presentation/tokens/colores.dart';
 import 'package:examen_poke_api/presentation/tokens/paddings.dart';
 import 'package:examen_poke_api/presentation/tokens/sombras.dart';
 import 'package:examen_poke_api/presentation/widgets/common/widgets_common.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class PokemondetailsPage extends StatelessWidget {
+class PokemondetailsPage extends ConsumerWidget {
   static const routerName = 'pokemon_details';
 
   const PokemondetailsPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final Size size = MediaQuery.of(context).size;
+    final Pokemon pokemon = ref.watch(selectedPokemonProvider)!;
+
     return Scaffold(
-      // ! Cambiar el color de fondo por el del pokemon o settear el [AppTheme]
-      backgroundColor: Colors.orange,
+      backgroundColor: pokemon.colorTypePokemon[0],
       body: SafeArea(
         bottom: false,
         child: Stack(
           children: [
-            _Fondo(size: size),
+            _Fondo(
+              size: size,
+              colorFondoBoton: pokemon.colorTypePokemon[0],
+            ),
             Column(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 15, right: 20),
+                Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 20),
                   child: SizedBox(
                     // height: 100,
                     child: Row(
                       children: [
-                        _BotonBack(),
+                        const _BotonBack(),
                         Padding(
-                          padding: EdgeInsets.only(left: 10),
+                          padding: const EdgeInsets.only(left: 10),
                           child: Text(
-                            'Pikachu',
-                            style: TextStyle(
+                            pokemon.nombre,
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 33,
                               fontWeight: FontWeight.w800,
                             ),
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Text(
-                          '#025',
-                          style: TextStyle(
+                          '#${pokemon.idPokemon.toString()}',
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.w800,
@@ -55,105 +63,79 @@ class PokemondetailsPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                //! Imagen del pokemon
+                const Spacer(),
                 SizedBox(
-                  width: size.width * 0.6,
-                  height: size.height * 0.3,
-                  child: const Placeholder(),
+                  width: size.width * 0.8,
+                  height: size.height * 0.35,
+                  child: Image.network(pokemon.urlImagen, fit: BoxFit.cover),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
-                const Row(
+                // ! falta agregar el tipo de pokemon
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _PokemonType(),
-                    _PokemonType(),
+                    _PokemonType(
+                      type: pokemon.tipoClase[0],
+                      color: pokemon.colorTypePokemon[0],
+                    ),
+                    if (pokemon.tipoClase.length > 1)
+                      _PokemonType(
+                        type: pokemon.tipoClase[1],
+                        color: pokemon.colorTypePokemon[1],
+                      ),
                   ],
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 25),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                   child: _TitleColors(
                     title: 'About',
+                    color: pokemon.colorTypePokemon[0],
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Row(
                     children: [
                       _AboutColumn(
                         icon: Icons.balance,
                         atributoName: 'Weight',
-                        value: 18,
-                        isMoves: false,
+                        value: pokemon.peso,
+                        // isMoves: false,
                       ),
-                      _SeparadorVertical(height: 90),
+                      const _SeparadorVertical(height: 90),
                       _AboutColumn(
                         icon: Icons.straighten,
                         atributoName: 'Height',
-                        value: 6,
-                        isMoves: false,
+                        value: pokemon.altura,
+                        // isMoves: false,
                       ),
-                      _SeparadorVertical(height: 90),
+                      const _SeparadorVertical(height: 90),
                       _AboutColumn(
                         icon: Icons.balance,
                         atributoName: 'Moves',
                         value: 18,
-                        isMoves: true,
+                        // isMoves: true,
+                        moves: pokemon.movimientos,
                       ),
                     ],
                   ),
                 ),
-                const _Description(
-                  description:
-                      "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley ",
+                const SizedBox(height: 25),
+                _Description(
+                  description: pokemon.descripcion,
                 ),
-                const _TitleColors(
+                // const SizedBox(height: 10),
+                _TitleColors(
                   title: 'Base Stats',
+                  color: pokemon.colorTypePokemon[0],
                 ),
-                const Padding(
-                  padding: paddingStatsAndDescription,
-                  child: Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          _TextStat(stat: 'HP'),
-                          _TextStat(stat: 'ATK'),
-                          _TextStat(stat: 'DEF'),
-                          _TextStat(stat: 'SATK'),
-                          _TextStat(stat: 'SDEF'),
-                          _TextStat(stat: 'SPD'),
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: _SeparadorVertical(height: 120),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _TextStat(stat: '45', isNumberStat: true),
-                          _TextStat(stat: '49', isNumberStat: true),
-                          _TextStat(stat: '49', isNumberStat: true),
-                          _TextStat(stat: '65', isNumberStat: true),
-                          _TextStat(stat: '65', isNumberStat: true),
-                          _TextStat(stat: '45', isNumberStat: true),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          _BarraStat(),
-                          _BarraStat(),
-                          _BarraStat(),
-                          _BarraStat(),
-                          _BarraStat(),
-                          _BarraStat(),
-                        ],
-                      ),
-                    ],
-                  ),
+                _BarrasStats(
+                  size: size,
+                  pokemon: pokemon,
                 ),
+                // const Spacer(),
               ],
             ),
           ],
@@ -163,33 +145,198 @@ class PokemondetailsPage extends StatelessWidget {
   }
 }
 
+class _BarrasStats extends StatelessWidget {
+  const _BarrasStats({
+    required this.size,
+    required this.pokemon,
+  });
+
+  final Size size;
+  final Pokemon pokemon;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 30, right: 30, bottom: 30, top: 15),
+      child: SizedBox(
+        width: size.width,
+        child: Row(
+          children: [
+            SizedBox(
+              width: size.width * 0.1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  _TextStat(
+                    stat: 'HP',
+                    color: pokemon.colorTypePokemon[0],
+                  ),
+                  _TextStat(
+                    stat: 'ATK',
+                    color: pokemon.colorTypePokemon[0],
+                  ),
+                  _TextStat(
+                    stat: 'DEF',
+                    color: pokemon.colorTypePokemon[0],
+                  ),
+                  _TextStat(
+                    stat: 'SATK',
+                    color: pokemon.colorTypePokemon[0],
+                  ),
+                  _TextStat(
+                    stat: 'SDEF',
+                    color: pokemon.colorTypePokemon[0],
+                  ),
+                  _TextStat(
+                    stat: 'SPD',
+                    color: pokemon.colorTypePokemon[0],
+                  ),
+                ],
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: _SeparadorVertical(height: 120),
+            ),
+            SizedBox(
+              width: size.width * 0.68,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      _TextStatNumber(
+                          stat: pokemon.vida.toString(), isNumberStat: true),
+                      _BarraStat(
+                        statBarra: pokemon.vida.toDouble() * 1.65,
+                        colorBarra: pokemon.colorTypePokemon[0],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      _TextStatNumber(
+                          stat: pokemon.ataque.toString(), isNumberStat: true),
+                      _BarraStat(
+                        statBarra: pokemon.ataque.toDouble() * 1.65,
+                        colorBarra: pokemon.colorTypePokemon[0],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      _TextStatNumber(
+                          stat: pokemon.defensa.toString(), isNumberStat: true),
+                      _BarraStat(
+                        statBarra: pokemon.defensa.toDouble() * 1.65,
+                        colorBarra: pokemon.colorTypePokemon[0],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      _TextStatNumber(
+                          stat: pokemon.especialAtaque.toString(),
+                          isNumberStat: true),
+                      _BarraStat(
+                        statBarra: pokemon.especialAtaque.toDouble() * 1.65,
+                        colorBarra: pokemon.colorTypePokemon[0],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      _TextStatNumber(
+                          stat: pokemon.especialDefensa.toString(),
+                          isNumberStat: true),
+                      _BarraStat(
+                        statBarra: pokemon.especialDefensa.toDouble() * 1.65,
+                        colorBarra: pokemon.colorTypePokemon[0],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      _TextStatNumber(
+                          stat: pokemon.velocidad.toString(),
+                          isNumberStat: true),
+                      _BarraStat(
+                        statBarra: pokemon.velocidad.toDouble() * 1.65,
+                        colorBarra: pokemon.colorTypePokemon[0],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _BarraStat extends StatelessWidget {
-  const _BarraStat();
+  final double statBarra;
+  final Color colorBarra;
+  const _BarraStat({
+    required this.statBarra,
+    required this.colorBarra,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.2),
-      child: Stack(
-        children: [
-          // ! Se tiene que ver como expandir esta barra para que se vea completo
-          SizedBox(
-            width: 100,
-            height: 5,
-            child: Material(
-              color: Color.fromARGB(255, 214, 214, 214),
-              borderRadius: BorderRadius.all(Radius.circular(100)),
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 12),
+        child: Stack(
+          children: [
+            // ! Se tiene que ver como expandir esta barra para que se vea completo
+            const SizedBox(
+              width: double.infinity,
+              height: 5,
+              child: Material(
+                color: Color.fromARGB(255, 214, 214, 214),
+                borderRadius: BorderRadius.all(Radius.circular(100)),
+              ),
             ),
-          ),
-          SizedBox(
-            width: 45,
-            height: 5,
-            child: Material(
-              color: Colors.orange,
-              borderRadius: BorderRadius.all(Radius.circular(100)),
+            SizedBox(
+              width: statBarra,
+              height: 5,
+              child: Material(
+                  color: colorBarra,
+                  borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(100),
+                  )),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TextStatNumber extends StatelessWidget {
+  final String stat;
+  final bool isNumberStat;
+  const _TextStatNumber({
+    required this.stat,
+    // ignore: unused_element
+    this.isNumberStat = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 21,
+      width: 26,
+      child: Center(
+        child: Text(
+          stat,
+          //! Cambiar el color por el del pokemon o settear el [AppTheme]
+          style: TextStyle(
+            color: (isNumberStat) ? colorTarjetaNombre : Colors.orange,
           ),
-        ],
+        ),
       ),
     );
   }
@@ -198,10 +345,12 @@ class _BarraStat extends StatelessWidget {
 class _TextStat extends StatelessWidget {
   final String stat;
   final bool isNumberStat;
+  final Color color;
   const _TextStat({
     required this.stat,
     // ignore: unused_element
     this.isNumberStat = false,
+    required this.color,
   });
 
   @override
@@ -212,7 +361,7 @@ class _TextStat extends StatelessWidget {
         stat,
         //! Cambiar el color por el del pokemon o settear el [AppTheme]
         style: TextStyle(
-          color: (isNumberStat) ? colorTarjetaNombre : Colors.orange,
+          color: (isNumberStat) ? colorTarjetaNombre : color,
         ),
       ),
     );
@@ -221,14 +370,15 @@ class _TextStat extends StatelessWidget {
 
 class _TitleColors extends StatelessWidget {
   final String title;
-  const _TitleColors({required this.title});
+  final Color color;
+  const _TitleColors({required this.title, required this.color});
 
   @override
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: const TextStyle(
-        color: Colors.orange,
+      style: TextStyle(
+        color: color,
         fontSize: 24,
         fontWeight: FontWeight.w800,
       ),
@@ -242,15 +392,20 @@ class _Description extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    final Size size = MediaQuery.of(context).size;
+    return SizedBox(
+      height: size.height * 0.08,
       child: Padding(
-        padding: paddingStatsAndDescription,
-        child: Text(
-          description,
-          style: const TextStyle(
-            color: colorTarjetaNombre,
-            fontSize: 15,
-            fontWeight: FontWeight.w400,
+        padding: const EdgeInsets.symmetric(horizontal: 30),
+        child: Center(
+          child: Text(
+            description,
+            maxLines: 4,
+            style: const TextStyle(
+              color: colorTarjetaNombre,
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ),
       ),
@@ -278,13 +433,16 @@ class _AboutColumn extends StatelessWidget {
   final IconData icon;
   final String atributoName;
   final int value;
-  final bool isMoves;
+  // final bool isMoves;
+  final List<String>? moves;
 
   const _AboutColumn({
     required this.icon,
     required this.atributoName,
     required this.value,
-    required this.isMoves,
+    // required this.isMoves,
+    // ignore: unused_element
+    this.moves,
   });
 
   @override
@@ -297,21 +455,21 @@ class _AboutColumn extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              (isMoves)
-                  ? const Column(
+              (moves != null)
+                  ? Column(
                       children: [
                         Text(
-                          'Chlroophyll',
-                          style: TextStyle(
+                          moves![0],
+                          style: const TextStyle(
                             color: colorMedium,
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Text(
-                          'Overgrow',
-                          style: TextStyle(
+                          moves![1],
+                          style: const TextStyle(
                             color: colorMedium,
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
@@ -355,7 +513,12 @@ class _AboutColumn extends StatelessWidget {
 }
 
 class _PokemonType extends StatelessWidget {
-  const _PokemonType();
+  final String type;
+  final Color color;
+  const _PokemonType({
+    required this.type,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -363,16 +526,16 @@ class _PokemonType extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: SizedBox(
         child: Material(
-          color: Colors.green,
+          color: color,
           borderRadius: BorderRadius.circular(100),
-          child: const Padding(
-            padding: EdgeInsets.symmetric(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
               horizontal: 15,
               vertical: 5,
             ),
             child: Text(
-              'Grass',
-              style: TextStyle(
+              type,
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15,
                 fontWeight: FontWeight.w800,
@@ -416,8 +579,10 @@ class _BotonBack extends StatelessWidget {
 }
 
 class _Fondo extends StatelessWidget {
+  final Color colorFondoBoton;
   const _Fondo({
     required this.size,
+    required this.colorFondoBoton,
   });
 
   final Size size;
@@ -434,7 +599,7 @@ class _Fondo extends StatelessWidget {
           child: Pokebola(
             colorBoton: colorSecundario.withOpacity(0.15),
             // ! Cambiar el color de fondo por el del pokemon o settear el [AppTheme]
-            colorFondoBoton: Colors.orange,
+            colorFondoBoton: colorFondoBoton,
             alturaCaras: 130,
             anchuraCaras: 265,
             margenEntreCaras: 20,

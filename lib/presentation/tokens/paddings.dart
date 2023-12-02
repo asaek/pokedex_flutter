@@ -6,7 +6,7 @@ const EdgeInsetsGeometry paddingCuadroGridandDetails = EdgeInsets.only(
   bottom: 7,
 );
 
-const EdgeInsetsGeometry paddingStatsAndDescription = EdgeInsets.symmetric(
-  horizontal: 30,
-  vertical: 30,
-);
+// const EdgeInsetsGeometry paddingStatsAndDescription = EdgeInsets.symmetric(
+//   horizontal: 30,
+  // vertical: 30,
+// );

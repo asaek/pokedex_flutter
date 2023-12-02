@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 class Pokemon {
   final String nombre;
   final int idPokemon;
@@ -13,6 +15,7 @@ class Pokemon {
   final int especialAtaque;
   final int especialDefensa;
   final int velocidad;
+  final List<Color> colorTypePokemon;
 
   Pokemon({
     required this.nombre,
@@ -29,5 +32,6 @@ class Pokemon {
     required this.especialAtaque,
     required this.especialDefensa,
     required this.velocidad,
+    required this.colorTypePokemon,
   });
 }

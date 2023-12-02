@@ -50,7 +50,7 @@ class PokedexNotifier extends StateNotifier<List<Pokemon>> {
   Future<void> loadNextPage() async {
     if (isLoading) return;
     isLoading = true;
-    cantidadPokemons += 40;
+    cantidadPokemons += 25;
     final List<Pokemon> pokemonList =
         await callback(cantidadPokemons: cantidadPokemons);
     state = [...state, ...pokemonList];
