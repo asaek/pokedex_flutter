@@ -1,6 +1,5 @@
-# Nombre del Proyecto
+#pokedex_flutter
 
-pokedex_flutter
 ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
 ![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white)
 ![Pokemon](https://img.shields.io/badge/Pokemon-FFCB05?style=for-the-badge&logo=pokemon&logoColor=black)
@@ -37,9 +36,8 @@ flutter run
 5. Si haces clic en un Pokemon, se abrira una pantalla de detalles donde podras ver mas informacion sobre ese Pokemon.
 6. Si no tienes internet te saldra un `vamo a calmarno`
 
-# Documentacion
 
-## Documentación
+# Documentación
 
 Este proyecto sigue la estructura de clean arquitecture, riverpod, atomic design, design tokens y Flutter. Aqui hay una descripcion general de los archivos y directorios mas importantes:
 
