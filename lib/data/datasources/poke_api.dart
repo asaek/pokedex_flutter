@@ -3,18 +3,13 @@ import 'package:examen_poke_api/data/mappers/pokemon_mapper.dart';
 import 'package:examen_poke_api/data/models/models.dart';
 import 'package:examen_poke_api/domain/datasources/pokeapi_datasource.dart';
 import 'package:examen_poke_api/domain/entities/pokemon_entity/pokemon_entity.dart';
+import 'package:examen_poke_api/domain/excepciones/excepciones.dart';
 
 class PokedexApiDatasource extends PokeApiDataSource {
   @override
   Future<List<Pokemon>> getPokedex({int inicioListPokemons = 25}) async {
     final Dio dio = Dio();
     List<Pokemon> pokemons = [];
-    // Map<String, dynamic> queryParameters = {
-    //   'limit': 20,
-    // };
-    // if (offset != null) {
-    //   queryParameters['offset'] = offset;
-    // }
     try {
       final List<PokemonDbResponse> listPokemons = [];
       int offset = 1;
@@ -24,14 +19,11 @@ class PokedexApiDatasource extends PokeApiDataSource {
       for (int i = offset; i <= inicioListPokemons; i++) {
         final responsePokeApi =
             await dio.get('https://pokeapi.co/api/v2/pokemon/$i/');
-        // print(response.statusCode);
-        // print(response.data);
+
         if (responsePokeApi.statusCode == 200 && responsePokeApi.data != null) {
-          // print(response.data);
           final PokemonDbResponse pokemonDbResponse =
               PokemonDbResponse.fromJson(responsePokeApi.data);
-          // print(pokemonDbResponse);
-          //* Solicitur de la descripcion
+          //* Solicitud de la descripcion
           final responseDescripcion =
               await dio.get(pokemonDbResponse.species.urlDescripcion);
           listPokemons.add(pokemonDbResponse);
@@ -42,15 +34,19 @@ class PokedexApiDatasource extends PokeApiDataSource {
               .flavorTextEntries[0].flavorText
               .replaceAll('\n', '');
         } else {
-          // print('Error al hacer la peticion');
-          // print('${response.statusCode}   Error: ${response.statusMessage}');
+          throw NetworkException('Error al obtener los pokemons');
         }
       }
       pokemons = listPokemons
           .map((e) => PokemonMapper.pokemonDbResponseToPokemon(e))
           .toList();
     } catch (e) {
-      // print(e);
+      rethrow;
+      // if (e is NetworkException || e is DioException) {
+      //   throw NetworkException('Error de conexion');
+      // } else {
+      //   throw GeneralException('Error al procesar los pokemons');
+      // }
     }
     return pokemons;
   }

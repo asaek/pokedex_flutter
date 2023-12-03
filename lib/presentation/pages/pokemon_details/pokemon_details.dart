@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:examen_poke_api/domain/entities/entitites.dart';
 import 'package:examen_poke_api/presentation/providers/providers.dart';
 import 'package:examen_poke_api/presentation/tokens/border_radius.dart';
@@ -67,25 +68,31 @@ class PokemondetailsPage extends ConsumerWidget {
                 SizedBox(
                   width: size.width * 0.8,
                   height: size.height * 0.35,
-                  child: Image.network(pokemon.urlImagen, fit: BoxFit.cover),
+                  child: Hero(
+                    tag: pokemon.idPokemon,
+                    child: Image.network(pokemon.urlImagen, fit: BoxFit.cover),
+                  ),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
-                // ! falta agregar el tipo de pokemon
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _PokemonType(
-                      type: pokemon.tipoClase[0],
-                      color: pokemon.colorTypePokemon[0],
-                    ),
-                    if (pokemon.tipoClase.length > 1)
+                FadeInDown(
+                  duration: const Duration(milliseconds: 1500),
+                  delay: const Duration(milliseconds: 500),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
                       _PokemonType(
-                        type: pokemon.tipoClase[1],
-                        color: pokemon.colorTypePokemon[1],
+                        type: pokemon.tipoClase[0],
+                        color: pokemon.colorTypePokemon[0],
                       ),
-                  ],
+                      if (pokemon.tipoClase.length > 1)
+                        _PokemonType(
+                          type: pokemon.tipoClase[1],
+                          color: pokemon.colorTypePokemon[1],
+                        ),
+                    ],
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15),
@@ -96,35 +103,41 @@ class PokemondetailsPage extends ConsumerWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    children: [
-                      _AboutColumn(
-                        icon: Icons.balance,
-                        atributoName: 'Weight',
-                        value: pokemon.peso,
-                        // isMoves: false,
-                      ),
-                      const _SeparadorVertical(height: 90),
-                      _AboutColumn(
-                        icon: Icons.straighten,
-                        atributoName: 'Height',
-                        value: pokemon.altura,
-                        // isMoves: false,
-                      ),
-                      const _SeparadorVertical(height: 90),
-                      _AboutColumn(
-                        icon: Icons.balance,
-                        atributoName: 'Moves',
-                        value: 18,
-                        // isMoves: true,
-                        moves: pokemon.movimientos,
-                      ),
-                    ],
+                  child: FadeInUp(
+                    duration: const Duration(milliseconds: 1500),
+                    child: Row(
+                      children: [
+                        _AboutColumn(
+                          icon: Icons.balance,
+                          atributoName: 'Weight',
+                          value: pokemon.peso,
+                          // isMoves: false,
+                        ),
+                        const _SeparadorVertical(height: 90),
+                        _AboutColumn(
+                          icon: Icons.straighten,
+                          atributoName: 'Height',
+                          value: pokemon.altura,
+                          // isMoves: false,
+                        ),
+                        const _SeparadorVertical(height: 90),
+                        _AboutColumn(
+                          icon: Icons.balance,
+                          atributoName: 'Moves',
+                          value: 18,
+                          // isMoves: true,
+                          moves: pokemon.movimientos,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 25),
-                _Description(
-                  description: pokemon.descripcion,
+                FadeIn(
+                  duration: const Duration(milliseconds: 1500),
+                  child: _Description(
+                    description: pokemon.descripcion,
+                  ),
                 ),
                 // const SizedBox(height: 10),
                 _TitleColors(
@@ -198,14 +211,13 @@ class _BarrasStats extends StatelessWidget {
               child: _SeparadorVertical(height: 120),
             ),
             SizedBox(
-              width: size.width * 0.68,
+              width: size.width * 0.64,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
-                      _TextStatNumber(
-                          stat: pokemon.vida.toString(), isNumberStat: true),
+                      _TextStatNumber(stat: pokemon.vida, isNumberStat: true),
                       _BarraStat(
                         statBarra: pokemon.vida.toDouble() * 1.65,
                         colorBarra: pokemon.colorTypePokemon[0],
@@ -214,8 +226,7 @@ class _BarrasStats extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      _TextStatNumber(
-                          stat: pokemon.ataque.toString(), isNumberStat: true),
+                      _TextStatNumber(stat: pokemon.ataque, isNumberStat: true),
                       _BarraStat(
                         statBarra: pokemon.ataque.toDouble() * 1.65,
                         colorBarra: pokemon.colorTypePokemon[0],
@@ -225,7 +236,7 @@ class _BarrasStats extends StatelessWidget {
                   Row(
                     children: [
                       _TextStatNumber(
-                          stat: pokemon.defensa.toString(), isNumberStat: true),
+                          stat: pokemon.defensa, isNumberStat: true),
                       _BarraStat(
                         statBarra: pokemon.defensa.toDouble() * 1.65,
                         colorBarra: pokemon.colorTypePokemon[0],
@@ -235,8 +246,7 @@ class _BarrasStats extends StatelessWidget {
                   Row(
                     children: [
                       _TextStatNumber(
-                          stat: pokemon.especialAtaque.toString(),
-                          isNumberStat: true),
+                          stat: pokemon.especialAtaque, isNumberStat: true),
                       _BarraStat(
                         statBarra: pokemon.especialAtaque.toDouble() * 1.65,
                         colorBarra: pokemon.colorTypePokemon[0],
@@ -246,8 +256,7 @@ class _BarrasStats extends StatelessWidget {
                   Row(
                     children: [
                       _TextStatNumber(
-                          stat: pokemon.especialDefensa.toString(),
-                          isNumberStat: true),
+                          stat: pokemon.especialDefensa, isNumberStat: true),
                       _BarraStat(
                         statBarra: pokemon.especialDefensa.toDouble() * 1.65,
                         colorBarra: pokemon.colorTypePokemon[0],
@@ -257,8 +266,7 @@ class _BarrasStats extends StatelessWidget {
                   Row(
                     children: [
                       _TextStatNumber(
-                          stat: pokemon.velocidad.toString(),
-                          isNumberStat: true),
+                          stat: pokemon.velocidad, isNumberStat: true),
                       _BarraStat(
                         statBarra: pokemon.velocidad.toDouble() * 1.65,
                         colorBarra: pokemon.colorTypePokemon[0],
@@ -290,7 +298,6 @@ class _BarraStat extends StatelessWidget {
         padding: const EdgeInsets.only(left: 12),
         child: Stack(
           children: [
-            // ! Se tiene que ver como expandir esta barra para que se vea completo
             const SizedBox(
               width: double.infinity,
               height: 5,
@@ -299,14 +306,21 @@ class _BarraStat extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(100)),
               ),
             ),
-            SizedBox(
-              width: statBarra,
-              height: 5,
-              child: Material(
-                  color: colorBarra,
-                  borderRadius: const BorderRadius.horizontal(
-                    left: Radius.circular(100),
-                  )),
+            TweenAnimationBuilder(
+              tween: Tween<double>(begin: 0, end: statBarra),
+              duration: const Duration(seconds: 2),
+              builder: (BuildContext context, double value, Widget? child) {
+                return SizedBox(
+                  width: value,
+                  height: 5,
+                  child: Material(
+                    color: colorBarra,
+                    borderRadius: const BorderRadius.horizontal(
+                      left: Radius.circular(100),
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -316,7 +330,7 @@ class _BarraStat extends StatelessWidget {
 }
 
 class _TextStatNumber extends StatelessWidget {
-  final String stat;
+  final int stat;
   final bool isNumberStat;
   const _TextStatNumber({
     required this.stat,
@@ -330,12 +344,17 @@ class _TextStatNumber extends StatelessWidget {
       height: 21,
       width: 26,
       child: Center(
-        child: Text(
-          stat,
-          //! Cambiar el color por el del pokemon o settear el [AppTheme]
-          style: TextStyle(
-            color: (isNumberStat) ? colorTarjetaNombre : Colors.orange,
-          ),
+        child: TweenAnimationBuilder(
+          tween: IntTween(begin: 0, end: stat),
+          duration: const Duration(milliseconds: 2000),
+          builder: (BuildContext context, int value, Widget? child) {
+            return Text(
+              value.toString(),
+              style: TextStyle(
+                color: (isNumberStat) ? colorTarjetaNombre : Colors.orange,
+              ),
+            );
+          },
         ),
       ),
     );
@@ -359,7 +378,6 @@ class _TextStat extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Text(
         stat,
-        //! Cambiar el color por el del pokemon o settear el [AppTheme]
         style: TextStyle(
           color: (isNumberStat) ? colorTarjetaNombre : color,
         ),
@@ -401,6 +419,7 @@ class _Description extends StatelessWidget {
           child: Text(
             description,
             maxLines: 4,
+            textAlign: TextAlign.center,
             style: const TextStyle(
               color: colorTarjetaNombre,
               fontSize: 15,
@@ -596,14 +615,16 @@ class _Fondo extends StatelessWidget {
         // const Spacer(flex: 4),
         Padding(
           padding: const EdgeInsets.only(right: 15),
-          child: Pokebola(
-            colorBoton: colorSecundario.withOpacity(0.15),
-            // ! Cambiar el color de fondo por el del pokemon o settear el [AppTheme]
-            colorFondoBoton: colorFondoBoton,
-            alturaCaras: 130,
-            anchuraCaras: 265,
-            margenEntreCaras: 20,
-            radioExterior: 50,
+          child: Hero(
+            tag: 'pokebola',
+            child: Pokebola(
+              colorBoton: colorSecundario.withOpacity(0.15),
+              colorFondoBoton: colorFondoBoton,
+              alturaCaras: 130,
+              anchuraCaras: 265,
+              margenEntreCaras: 20,
+              radioExterior: 50,
+            ),
           ),
         ),
         // const Spacer(flex: 4),
