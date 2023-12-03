@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:examen_poke_api/domain/entities/entitites.dart';
+import 'package:examen_poke_api/presentation/pages/pokedex/widgets/pokedex_menu_widgets.dart';
 import 'package:examen_poke_api/presentation/providers/providers.dart';
 import 'package:examen_poke_api/presentation/tokens/border_radius.dart';
 import 'package:examen_poke_api/presentation/tokens/colores.dart';
@@ -55,7 +56,7 @@ class PokedexPage extends StatelessWidget {
             const SizedBox(
               height: 15,
             ),
-            const _Buscador(padding: padding),
+            const Buscador(padding: padding),
             const SizedBox(
               height: 20,
             ),
@@ -85,108 +86,6 @@ class PokedexPage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _Buscador extends ConsumerWidget {
-  const _Buscador({
-    required this.padding,
-  });
-
-  final double padding;
-
-  @override
-  Widget build(BuildContext context, ref) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: padding),
-      child: Row(
-        children: [
-          Expanded(
-            child: ClipRRect(
-              borderRadius: borderRadiusSearch,
-              child: SizedBox(
-                height: 43,
-                child: Material(
-                  color: colorSecundario,
-                  borderRadius: borderRadiusSearch,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: borderRadiusSearch,
-                      boxShadow: sombraPrincipal,
-                    ),
-                    child: TextField(
-                      onChanged: (value) {
-                        ref
-                            .read(pokemonsListProvider.notifier)
-                            .buscarPokemons(nombrePokemon: value);
-                      },
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Search',
-                        contentPadding: EdgeInsets.fromLTRB(
-                          0,
-                          10.5,
-                          0,
-                          0,
-                        ),
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: colorPrincipal,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(width: padding),
-          PopupMenuButton<String>(
-            itemBuilder: (context) {
-              return [
-                const PopupMenuItem(
-                  value: 'id',
-                  child: Text('Ordenar por ID'),
-                ),
-                const PopupMenuItem(
-                  value: 'alfabetico',
-                  child: Text('Ordenar alfabeticamente'),
-                ),
-              ];
-            },
-            onSelected: (String value) {
-              if (value == 'alfabetico') {
-                ref
-                    .read(pokemonsListProvider.notifier)
-                    .sortPokemonsAlfabeticamente();
-              } else if (value == 'id') {
-                ref.read(pokemonsListProvider.notifier).sortPokemonsId();
-              }
-            },
-            child: ClipRRect(
-              borderRadius: borderRadiusBotonMenu,
-              child: SizedBox(
-                width: 43,
-                height: 43,
-                child: Material(
-                  color: colorSecundario,
-                  shape: const CircleBorder(),
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.transparent,
-                      shape: BoxShape.circle,
-                      boxShadow: sombraPrincipal,
-                    ),
-                    child: const Icon(Icons.menu, color: colorPrincipal),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -289,10 +188,10 @@ class _ListPokemonsState extends ConsumerState<_ListPokemons> {
       );
     }
     if (pokemonState.pokemons == null) {
-      return const _LoadingPokedex();
+      return const LoadingPokedex();
     }
     if (pokemonState.pokemons!.isEmpty) {
-      return const _BusquedaVacia();
+      return const BusquedaVacia();
     }
 
     return GridView.builder(
@@ -388,62 +287,6 @@ class _ListPokemonsState extends ConsumerState<_ListPokemons> {
           ),
         );
       },
-    );
-  }
-}
-
-class _BusquedaVacia extends StatelessWidget {
-  const _BusquedaVacia();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Spacer(
-          flex: 3,
-        ),
-        SizedBox(
-          height: 200,
-          width: 200,
-          child: Image.asset(
-            'assets/images/pikachu_corriendo.gif',
-            fit: BoxFit.fitWidth,
-          ),
-        ),
-        const Text('No se encontraron pokemons',
-            style: TextStyle(fontSize: 25)),
-        const Spacer(
-          flex: 6,
-        ),
-        const SizedBox(
-          width: double.infinity,
-        ),
-      ],
-    );
-  }
-}
-
-class _LoadingPokedex extends StatelessWidget {
-  const _LoadingPokedex();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        SizedBox(
-          height: 200,
-          width: 250,
-          child: Image.asset(
-            'assets/images/pikachu_pokebola_corriendo.gif',
-            fit: BoxFit.fitHeight,
-          ),
-        ),
-        const SizedBox(
-          width: double.infinity,
-        ),
-      ],
     );
   }
 }

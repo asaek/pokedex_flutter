@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'wdigets/widgets_pokemon_details.dart';
+
 class PokemondetailsPage extends ConsumerWidget {
   static const routerName = 'pokemon_details';
 
@@ -107,21 +109,21 @@ class PokemondetailsPage extends ConsumerWidget {
                     duration: const Duration(milliseconds: 1500),
                     child: Row(
                       children: [
-                        _AboutColumn(
+                        AboutColumn(
                           icon: Icons.balance,
                           atributoName: 'Weight',
                           value: pokemon.peso,
                           // isMoves: false,
                         ),
-                        const _SeparadorVertical(height: 90),
-                        _AboutColumn(
+                        const SeparadorVertical(height: 90),
+                        AboutColumn(
                           icon: Icons.straighten,
                           atributoName: 'Height',
                           value: pokemon.altura,
                           // isMoves: false,
                         ),
-                        const _SeparadorVertical(height: 90),
-                        _AboutColumn(
+                        const SeparadorVertical(height: 90),
+                        AboutColumn(
                           icon: Icons.balance,
                           atributoName: 'Moves',
                           value: 18,
@@ -144,7 +146,7 @@ class PokemondetailsPage extends ConsumerWidget {
                   title: 'Base Stats',
                   color: pokemon.colorTypePokemon[0],
                 ),
-                _BarrasStats(
+                BarrasStats(
                   size: size,
                   pokemon: pokemon,
                 ),
@@ -152,234 +154,6 @@ class PokemondetailsPage extends ConsumerWidget {
               ],
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _BarrasStats extends StatelessWidget {
-  const _BarrasStats({
-    required this.size,
-    required this.pokemon,
-  });
-
-  final Size size;
-  final Pokemon pokemon;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 30, right: 30, bottom: 30, top: 15),
-      child: SizedBox(
-        width: size.width,
-        child: Row(
-          children: [
-            SizedBox(
-              width: size.width * 0.1,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  _TextStat(
-                    stat: 'HP',
-                    color: pokemon.colorTypePokemon[0],
-                  ),
-                  _TextStat(
-                    stat: 'ATK',
-                    color: pokemon.colorTypePokemon[0],
-                  ),
-                  _TextStat(
-                    stat: 'DEF',
-                    color: pokemon.colorTypePokemon[0],
-                  ),
-                  _TextStat(
-                    stat: 'SATK',
-                    color: pokemon.colorTypePokemon[0],
-                  ),
-                  _TextStat(
-                    stat: 'SDEF',
-                    color: pokemon.colorTypePokemon[0],
-                  ),
-                  _TextStat(
-                    stat: 'SPD',
-                    color: pokemon.colorTypePokemon[0],
-                  ),
-                ],
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: _SeparadorVertical(height: 120),
-            ),
-            SizedBox(
-              width: size.width * 0.64,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      _TextStatNumber(stat: pokemon.vida, isNumberStat: true),
-                      _BarraStat(
-                        statBarra: pokemon.vida.toDouble() * 1.65,
-                        colorBarra: pokemon.colorTypePokemon[0],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      _TextStatNumber(stat: pokemon.ataque, isNumberStat: true),
-                      _BarraStat(
-                        statBarra: pokemon.ataque.toDouble() * 1.65,
-                        colorBarra: pokemon.colorTypePokemon[0],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      _TextStatNumber(
-                          stat: pokemon.defensa, isNumberStat: true),
-                      _BarraStat(
-                        statBarra: pokemon.defensa.toDouble() * 1.65,
-                        colorBarra: pokemon.colorTypePokemon[0],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      _TextStatNumber(
-                          stat: pokemon.especialAtaque, isNumberStat: true),
-                      _BarraStat(
-                        statBarra: pokemon.especialAtaque.toDouble() * 1.65,
-                        colorBarra: pokemon.colorTypePokemon[0],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      _TextStatNumber(
-                          stat: pokemon.especialDefensa, isNumberStat: true),
-                      _BarraStat(
-                        statBarra: pokemon.especialDefensa.toDouble() * 1.65,
-                        colorBarra: pokemon.colorTypePokemon[0],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      _TextStatNumber(
-                          stat: pokemon.velocidad, isNumberStat: true),
-                      _BarraStat(
-                        statBarra: pokemon.velocidad.toDouble() * 1.65,
-                        colorBarra: pokemon.colorTypePokemon[0],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _BarraStat extends StatelessWidget {
-  final double statBarra;
-  final Color colorBarra;
-  const _BarraStat({
-    required this.statBarra,
-    required this.colorBarra,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 12),
-        child: Stack(
-          children: [
-            const SizedBox(
-              width: double.infinity,
-              height: 5,
-              child: Material(
-                color: Color.fromARGB(255, 214, 214, 214),
-                borderRadius: BorderRadius.all(Radius.circular(100)),
-              ),
-            ),
-            TweenAnimationBuilder(
-              tween: Tween<double>(begin: 0, end: statBarra),
-              duration: const Duration(seconds: 2),
-              builder: (BuildContext context, double value, Widget? child) {
-                return SizedBox(
-                  width: value,
-                  height: 5,
-                  child: Material(
-                    color: colorBarra,
-                    borderRadius: const BorderRadius.horizontal(
-                      left: Radius.circular(100),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _TextStatNumber extends StatelessWidget {
-  final int stat;
-  final bool isNumberStat;
-  const _TextStatNumber({
-    required this.stat,
-    // ignore: unused_element
-    this.isNumberStat = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 21,
-      width: 26,
-      child: Center(
-        child: TweenAnimationBuilder(
-          tween: IntTween(begin: 0, end: stat),
-          duration: const Duration(milliseconds: 2000),
-          builder: (BuildContext context, int value, Widget? child) {
-            return Text(
-              value.toString(),
-              style: TextStyle(
-                color: (isNumberStat) ? colorTarjetaNombre : Colors.orange,
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class _TextStat extends StatelessWidget {
-  final String stat;
-  final bool isNumberStat;
-  final Color color;
-  const _TextStat({
-    required this.stat,
-    // ignore: unused_element
-    this.isNumberStat = false,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Text(
-        stat,
-        style: TextStyle(
-          color: (isNumberStat) ? colorTarjetaNombre : color,
         ),
       ),
     );
@@ -425,105 +199,6 @@ class _Description extends StatelessWidget {
               fontSize: 15,
               fontWeight: FontWeight.w400,
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _SeparadorVertical extends StatelessWidget {
-  final double height;
-  const _SeparadorVertical({required this.height});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 1,
-      height: height,
-      child: const Material(
-        color: Color.fromARGB(255, 214, 214, 214),
-      ),
-    );
-  }
-}
-
-class _AboutColumn extends StatelessWidget {
-  final IconData icon;
-  final String atributoName;
-  final int value;
-  // final bool isMoves;
-  final List<String>? moves;
-
-  const _AboutColumn({
-    required this.icon,
-    required this.atributoName,
-    required this.value,
-    // required this.isMoves,
-    // ignore: unused_element
-    this.moves,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: SizedBox(
-        height: 90,
-        child: Material(
-          color: Colors.transparent,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              (moves != null)
-                  ? Column(
-                      children: [
-                        Text(
-                          moves![0],
-                          style: const TextStyle(
-                            color: colorMedium,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          moves![1],
-                          style: const TextStyle(
-                            color: colorMedium,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          icon,
-                          color: colorMedium,
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          value.toString(),
-                          style: const TextStyle(
-                            color: colorMedium,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-              const SizedBox(height: 20),
-              Text(
-                atributoName,
-                style: const TextStyle(
-                  color: colorMedium,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ],
           ),
         ),
       ),
